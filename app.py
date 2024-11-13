@@ -29,12 +29,15 @@ ipa_symbols = {
     'ʤ': 'voiced palato-alveolar affricate'  # Dzh
 }
 
-
 # Initialize session state
 if 'remaining' not in st.session_state:
     st.session_state.remaining = list(ipa_symbols.keys())
 if 'current_symbol' not in st.session_state:
     st.session_state.current_symbol = random.choice(st.session_state.remaining)
+if 'score' not in st.session_state:
+    st.session_state.score = 0
+if 'trials' not in st.session_state:
+    st.session_state.trials = 0
 
 # Start button and app functionality
 st.title("English Consonant Practice App")
@@ -53,8 +56,10 @@ if 'started' in st.session_state and st.session_state.started:
 
         # Check the answer
         if st.button("Submit Answer"):
+            st.session_state.trials += 1
             if user_answer.lower().strip() == ipa_symbols[symbol_to_guess].lower():
                 st.success("Correct!")
+                st.session_state.score += 1
                 st.session_state.remaining.remove(symbol_to_guess)
                 if st.session_state.remaining:
                     st.session_state.current_symbol = random.choice(st.session_state.remaining)
@@ -62,11 +67,9 @@ if 'started' in st.session_state and st.session_state.started:
                 st.error("Wrong answer. Try again!")
     else:
         st.balloons()
-        st.success("You've completed the practice. Good job!")
+        st.write(f"You've completed the practice with a score of {st.session_state.score} out of {st.session_state.trials}. Good job!")
 
-# Reset button to restart the practice
-if st.button("Restart"):
-    st.session_state.remaining = list(ipa_symbols.keys())
-    st.session_state.current_symbol = random.choice(st.session_state.remaining)
-    st.session_state.started = False
-    st.experimental_rerun()
+# Display score and trials
+if 'score' in st.session_state and 'trials' in st.session_state:
+    st.write(f"Score: {st.session_state.score}")
+    st.write(f"Trials: {st.session_state.trials}")
