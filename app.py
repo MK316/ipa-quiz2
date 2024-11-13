@@ -75,5 +75,4 @@ if 'started' in st.session_state and st.session_state.started:
 
 # Display score and trials
 if 'score' in st.session_state and 'trials' in st.session_state:
-    st.write(f"Score: {st.session_state.score}")
-    st.write(f"Trials: {st.session_state.trials}")
+    st.write(f"Status: {st.session_state.score} out of {st.session_state.trials}")
