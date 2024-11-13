@@ -2,6 +2,7 @@ import streamlit as st
 import random
 
 # Dictionary of IPA symbols and their descriptions for consonants and vowels
+# Dictionary of IPA symbols and their descriptions for consonants and vowels
 ipa_consonants = {
     'p': 'voiceless bilabial stop',
     'b': 'voiced bilabial stop',
@@ -42,40 +43,48 @@ ipa_vowels = {
     'ʊ': 'high back rounded lax',   # like in "foot"
     'u': 'high back rounded tense', # like in "boot"
 }
+# Function to load the correct dataset based on the user's choice
+def load_data(choice):
+    if choice == 'Consonant Symbols':
+        return ipa_consonants
+    elif choice == 'Monophthong Vowel Symbols':
+        return ipa_vowels
+    else:
+        return {}
 
 # UI for selection
 st.title("👏 Phonetic Description Practice")
-choice = st.radio("Choose a symbol set to practice:", ('Consonant Symbols', 'Monophthong Vowel Symbols'))
+choice = st.radio("Choose a symbol set to practice:", ('Consonant Symbols', 'Monophthong Vowel Symbols'), on_change=lambda: st.session_state.update(change_dataset=True))
 
-# Dynamic data loading based on selection
-if choice == 'Consonant Symbols':
-    dataset = ipa_consonants
-elif choice == 'Monophthong Vowel Symbols':
-    dataset = ipa_vowels
-
-# Initialize or reset session states
-if 'remaining' not in st.session_state or 'change_dataset' in st.session_state:
-    st.session_state.remaining = list(dataset.keys())
+# Check if the dataset needs to be changed
+if 'change_dataset' in st.session_state and st.session_state.change_dataset:
+    st.session_state.data = load_data(choice)
+    st.session_state.remaining = list(st.session_state.data.keys())
     st.session_state.current_symbol = random.choice(st.session_state.remaining)
-    st.session_state.started = False
     st.session_state.score = 0
     st.session_state.trials = 0
     st.session_state.change_dataset = False
 
-# Start the practice
+# Start the practice or reset the session state
 if st.button("Start Practice"):
+    st.session_state.data = load_data(choice)
+    st.session_state.remaining = list(st.session_state.data.keys())
+    st.session_state.current_symbol = random.choice(st.session_state.remaining)
+    st.session_state.score = 0
+    st.session_state.trials = 0
     st.session_state.started = True
-    st.session_state.change_dataset = False
 
-if st.session_state.started:
+if 'started' in st.session_state and st.session_state.started:
     if st.session_state.remaining:
         symbol_to_guess = st.session_state.current_symbol
         st.write(f"What is the description for the IPA symbol '{symbol_to_guess}'?")
         user_answer = st.text_input("Type your answer here", key=str(st.session_state.trials))
 
+        # Button for submitting the answer
         if st.button("Submit Answer"):
             st.session_state.trials += 1
-            if user_answer.lower().strip() == dataset[symbol_to_guess].lower():
+            correct_answer = st.session_state.data[symbol_to_guess].lower().strip()
+            if user_answer.lower().strip() == correct_answer:
                 st.success("😍 Good job!")
                 st.session_state.score += 1
                 st.session_state.remaining.remove(symbol_to_guess)
@@ -83,6 +92,7 @@ if st.session_state.started:
                     st.session_state.current_symbol = random.choice(st.session_state.remaining)
             else:
                 st.error("Try again 😥")
+
     else:
         st.balloons()
         st.success(f"🎉🎉🎉 You've completed the practice with a score of {st.session_state.score} out of {st.session_state.trials}. Good job!")
