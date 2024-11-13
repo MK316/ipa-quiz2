@@ -43,28 +43,31 @@ ipa_vowels = {
     'u': 'high back rounded tense', # like in "boot"
 }
 
-# Initialize session state
-if 'data' not in st.session_state:
-    st.session_state.data = {}
-
 # UI for selection
 st.title("👏 Phonetic Description Practice")
 choice = st.radio("Choose a symbol set to practice:", ('Consonant Symbols', 'Monophthong Vowel Symbols'))
 
+# Dynamic data loading based on selection
 if choice == 'Consonant Symbols':
-    st.session_state.data = ipa_consonants
+    dataset = ipa_consonants
 elif choice == 'Monophthong Vowel Symbols':
-    st.session_state.data = ipa_vowels
+    dataset = ipa_vowels
 
-# Start button and practice functionality
-if st.button("Start Practice"):
-    st.session_state.remaining = list(st.session_state.data.keys())
+# Initialize or reset session states
+if 'remaining' not in st.session_state or 'change_dataset' in st.session_state:
+    st.session_state.remaining = list(dataset.keys())
     st.session_state.current_symbol = random.choice(st.session_state.remaining)
-    st.session_state.started = True
+    st.session_state.started = False
     st.session_state.score = 0
     st.session_state.trials = 0
+    st.session_state.change_dataset = False
 
-if 'started' in st.session_state and st.session_state.started:
+# Start the practice
+if st.button("Start Practice"):
+    st.session_state.started = True
+    st.session_state.change_dataset = False
+
+if st.session_state.started:
     if st.session_state.remaining:
         symbol_to_guess = st.session_state.current_symbol
         st.write(f"What is the description for the IPA symbol '{symbol_to_guess}'?")
@@ -72,7 +75,7 @@ if 'started' in st.session_state and st.session_state.started:
 
         if st.button("Submit Answer"):
             st.session_state.trials += 1
-            if user_answer.lower().strip() == st.session_state.data[symbol_to_guess].lower():
+            if user_answer.lower().strip() == dataset[symbol_to_guess].lower():
                 st.success("😍 Good job!")
                 st.session_state.score += 1
                 st.session_state.remaining.remove(symbol_to_guess)
