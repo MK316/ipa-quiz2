@@ -42,7 +42,7 @@ if 'trials' not in st.session_state:
 # Start button and app functionality
 st.title("👏 Phonetic description: ")
 st.write("24 English Consonant Practice")
-st.markdown("Notes: 1. Use '-' for two-word description (e.g., palato-alveolar).\n2. Use minimal description: e.g., /m/ is bilabial nasal. \n3. Use 'palato-alveolar' instead of 'alveo-palatal' or 'postalveolar'.") 
+st.markdown("Notes: \n1. Use '-' for two-word description (e.g., palato-alveolar).\n2. Use minimal description: e.g., /m/ is bilabial nasal. \n3. Use 'palato-alveolar' instead of 'alveo-palatal' or 'postalveolar'.") 
 st.caption("When 24 sounds are all answered correctly, the app will finish. If you answer incorrectly, the symbol will reappear.")
 if st.button("Show a symbol"):
     st.session_state.started = True
