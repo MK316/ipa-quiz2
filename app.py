@@ -40,9 +40,10 @@ if 'trials' not in st.session_state:
     st.session_state.trials = 0
 
 # Start button and app functionality
-st.title("English Consonant Practice App")
-
-if st.button("Start Practice"):
+st.title("👏 Phonetic description: 24 English Consonant Practice")
+st.caption("Notes: 1. Use '-' for two-word description (e.g., palato-alveolar). \n2. Use minimal description: e.g., /m/ is bilabial nasal. \n3. Use 'palato-alveolar' instead of 'alveo-palatal' or 'postalveolar'.") 
+st.caption("When 24 sounds are all answered correctly, the app will finish. If you answer incorrectly, the symbol will reappear.")
+if st.button("Show a symbol"):
     st.session_state.started = True
 
 if 'started' in st.session_state and st.session_state.started:
