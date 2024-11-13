@@ -52,7 +52,7 @@ if 'started' in st.session_state and st.session_state.started:
         st.write(f"What is the description for the IPA symbol '{symbol_to_guess}'?")
 
         # User input for the answer
-        user_answer = st.text_input("Type your answer here", key='answer')
+        user_answer = st.text_input("Type your answer here", key=str(st.session_state.trials))
 
         # Check the answer
         if st.button("Submit Answer"):
@@ -61,10 +61,12 @@ if 'started' in st.session_state and st.session_state.started:
                 st.success("Correct!")
                 st.session_state.score += 1
                 st.session_state.remaining.remove(symbol_to_guess)
-                if st.session_state.remaining:
-                    st.session_state.current_symbol = random.choice(st.session_state.remaining)
             else:
                 st.error("Wrong answer. Try again!")
+            
+            # Update the symbol to guess only if there are remaining symbols
+            if st.session_state.remaining:
+                st.session_state.current_symbol = random.choice(st.session_state.remaining)
     else:
         st.balloons()
         st.write(f"You've completed the practice with a score of {st.session_state.score} out of {st.session_state.trials}. Good job!")
