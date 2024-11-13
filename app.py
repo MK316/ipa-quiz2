@@ -18,13 +18,13 @@ ipa_symbols = {
     'ʃ': 'voiceless palato-alveolar fricative',  # Esh
     'ʒ': 'voiced palato-alveolar fricative',  # Ezh
     'h': 'voiceless glottal fricative',
-    'm': 'voiced bilabial nasal',
-    'n': 'voiced alveolar nasal',
-    'ŋ': 'voiced velar nasal',  # Eng
-    'l': 'voiced alveolar lateral approximant',
-    'r': 'voiced alveolar approximant',
-    'w': 'voiced labio-velar approximant',
-    'j': 'voiced palatal approximant',
+    'm': 'bilabial nasal',
+    'n': 'alveolar nasal',
+    'ŋ': 'velar nasal',  # Eng
+    'l': 'alveolar lateral approximant',
+    'r': 'alveolar approximant',
+    'w': 'labio-velar approximant',
+    'j': 'palatal approximant',
     'ʧ': 'voiceless palato-alveolar affricate',  # Tsh
     'ʤ': 'voiced palato-alveolar affricate'  # Dzh
 }
