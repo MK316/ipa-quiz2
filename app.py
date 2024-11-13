@@ -60,18 +60,18 @@ if 'started' in st.session_state and st.session_state.started:
         if st.button("Submit Answer"):
             st.session_state.trials += 1
             if user_answer.lower().strip() == ipa_symbols[symbol_to_guess].lower():
-                st.success("Correct!")
+                st.success("😍 Good job!")
                 st.session_state.score += 1
                 st.session_state.remaining.remove(symbol_to_guess)
             else:
-                st.error("Wrong answer. Try again!")
+                st.error("Try again 😥")
             
             # Update the symbol to guess only if there are remaining symbols
             if st.session_state.remaining:
                 st.session_state.current_symbol = random.choice(st.session_state.remaining)
     else:
         st.balloons()
-        st.write(f"You've completed the practice with a score of {st.session_state.score} out of {st.session_state.trials}. Good job!")
+        st.write(f"🎉🎉🎉 You've completed the practice with a score of {st.session_state.score} out of {st.session_state.trials}. Good job!")
 
 # Display score and trials
 if 'score' in st.session_state and 'trials' in st.session_state:
