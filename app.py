@@ -46,6 +46,7 @@ if 'last_choice' not in st.session_state or st.session_state.last_choice != choi
     st.session_state.score = 0
     st.session_state.trials = 0
     st.session_state.started = False
+    st.session_state.answered = False
     st.session_state.last_choice = choice
 
 # Start or continue the practice
@@ -56,6 +57,7 @@ if st.button("Start Practice / Next Symbol"):
         st.session_state.started = True
     if st.session_state.remaining:
         st.session_state.current_symbol = st.session_state.remaining.pop()
+        st.session_state.answered = False  # Reset answered flag for the new symbol
     else:
         st.balloons()
         st.success(f"🎉 You've completed the practice with a score of {st.session_state.score} out of {st.session_state.trials}. Well done!")
@@ -66,15 +68,16 @@ if st.session_state.started and st.session_state.current_symbol:
     st.write(f"What is the description for the IPA symbol '{st.session_state.current_symbol}'?")
     user_answer = st.text_input("Type your answer here", key=st.session_state.current_symbol)
 
-    if st.button("Submit Answer"):
+    if st.button("Submit Answer") and not st.session_state.answered:
         st.session_state.trials += 1
         if user_answer.lower().strip() == st.session_state.data[st.session_state.current_symbol].lower():
             st.success("😍 Good job!")
             st.session_state.score += 1
         else:
             st.error(f"Incorrect. The correct answer is: {st.session_state.data[st.session_state.current_symbol]}")
-            st.session_state.remaining.append(st.session_state.current_symbol)  # Add symbol back for retry
-            random.shuffle(st.session_state.remaining)
+        st.session_state.answered = True  # Set the answered flag to True after a submission
+        st.session_state.remaining.append(st.session_state.current_symbol)  # Add symbol back for retry
+        random.shuffle(st.session_state.remaining)
 
 # Display score and trials
 if st.session_state.trials > 0:
